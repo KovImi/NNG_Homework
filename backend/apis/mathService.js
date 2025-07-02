@@ -1,17 +1,21 @@
 //mathService API module
 
 // getFibonacci function with memoization
-function getFibonacci(index, cache) {
-  cache = cache || [];
-  if (cache[index]) {
-    return cache[index];
-  } else {
-    if (index < 3) return 1;
-    else {
-      cache[index] = getFibonacci(index - 1, cache) + getFibonacci(index - 2, cache);
+function nthFibonacciUtil(n, memo) {
+    if (n <= 1) {
+        return n;
     }
-  }
-  return cache[index];
+    if (memo[n] !== -1) {
+        return memo[n];
+    }
+    memo[n] = nthFibonacciUtil(n - 1, memo) + nthFibonacciUtil(n - 2, memo);
+    return memo[n];
+}
+
+function getFibonacci(params) {
+    const n = params?.n ?? params?.index ?? 0;
+    let memo = new Array(n + 1).fill(-1);
+    return nthFibonacciUtil(n, memo);
 }
 
 // multiplyMatrices function
