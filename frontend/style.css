@@ -199,10 +199,6 @@ body.light #result-block {
   max-width: 1200px;
   width: 95vw;
 }
-body.dark .api-bar-custom {
-  background: #23272f;
-  box-shadow: 0 2px 8px #23272f60;
-}
 .json-input-custom {
   max-width: 1200px;
   width: 95vw;
@@ -244,6 +240,26 @@ body.dark .result-block-custom {
   background: #23272f;
   color: #e0e0e0;
   box-shadow: 0 2px 12px #23272f30;
+}
+.result-wrapper {
+  position: relative;
+  max-width: 1200px;
+  width: 95vw;
+  margin: 0 auto 38px auto;
+}
+#loader.position-absolute {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body.dark #loader.position-absolute {
+  background: transparent !important;
 }
 @media (max-width: 900px) {
   .topbar {

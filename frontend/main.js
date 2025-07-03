@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const runBtn = document.getElementById('run-btn');
   const resultBlock = document.getElementById('result-block');
   const topbar = document.querySelector('.topbar');
+  const loader = document.getElementById('loader');
 
   // Theme toggle
   toggleThemeBtn.addEventListener('click', () => {
@@ -87,11 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       json = JSON.parse(jsonInput.value);
     } catch (e) {
+      loader.classList.add('visually-hidden');
       resultBlock.textContent = 'Invalid JSON: ' + e.message;
       resultBlock.style.color = '#c00';
       return;
     }
-    resultBlock.textContent = 'Loading...';
+    loader.classList.remove('visually-hidden');
+    resultBlock.textContent = '';
     resultBlock.style.color = '';
     try {
       const res = await fetch('/api/dispatch', {
@@ -100,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(json)
       });
       const data = await res.json();
+      loader.classList.add('visually-hidden');
+      // Ha imageService.getImageByName, popupban kép
       if (
         apiSelect.value === 'imageService' &&
         methodSelect.value === 'getImageByName' &&
@@ -114,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       resultBlock.style.color = '';
     } catch (e) {
+      loader.classList.add('visually-hidden');
       resultBlock.textContent = 'Request failed: ' + e.message;
       resultBlock.style.color = '#c00';
     }

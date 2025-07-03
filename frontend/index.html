@@ -37,7 +37,14 @@
     </div>
     <textarea id="json-input" class="form-control mx-auto mt-0 mb-3 json-input-custom" placeholder='{"calls": [{"service": "mathService", "method": "getFibonacci", "params": {"n": 7}}]}'></textarea>
     <button id="run-btn" class="btn btn-primary fw-bold mx-auto mb-3 px-5 py-2 run-btn-custom">Run</button>
-    <pre id="result-block" class="mx-auto mb-4 rounded shadow-sm result-block-custom"></pre>
+    <div class="result-wrapper position-relative mx-auto mb-4" style="max-width:1200px;width:95vw;">
+      <div id="loader" class="d-flex justify-content-center align-items-center visually-hidden position-absolute top-0 start-0 w-100 h-100" style="background:rgba(255,255,255,0.7);z-index:10;">
+        <div class="spinner-border text-primary" role="status" style="width: 2.5rem; height: 2.5rem;">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <pre id="result-block" class="rounded shadow-sm result-block-custom m-0"></pre>
+    </div>
   </div>
   <script src="main.js"></script>
 </body>
