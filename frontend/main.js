@@ -104,18 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await res.json();
       loader.classList.add('visually-hidden');
-      // Ha imageService.getImageByName, popupban kép
       if (
         apiSelect.value === 'imageService' &&
         methodSelect.value === 'getImageByName' &&
         data[0] && data[0].result && typeof data[0].result === 'string'
       ) {
-        const imgUrl = data[0].result;
-        const win = window.open('', '_blank', 'width=600,height=600');
-        win.document.write(`<img src='${imgUrl}' alt='Image result' style='max-width:100%;max-height:100%;display:block;margin:auto;'>`);
-        resultBlock.textContent = imgUrl;
+        resultBlock.innerHTML = `<code class='language-json'>${Prism.highlight(JSON.stringify(data[0].result, null, 2), Prism.languages.json, 'json')}</code>`;
       } else {
-        resultBlock.textContent = JSON.stringify(data, null, 2);
+        resultBlock.innerHTML = `<code class='language-json'>${Prism.highlight(JSON.stringify(data, null, 2), Prism.languages.json, 'json')}</code>`;
       }
       resultBlock.style.color = '';
     } catch (e) {
