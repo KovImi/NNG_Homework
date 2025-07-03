@@ -31,7 +31,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Method selector: update JSON input
+
+  if (apiSelect.querySelector('option[value="imageService"]') === null) {
+    const imgOpt = document.createElement('option');
+    imgOpt.value = 'imageService';
+    imgOpt.textContent = 'imageService';
+    apiSelect.appendChild(imgOpt);
+  }
+
+  const imageServiceMethods = [
+    { value: 'getImageByName', label: 'getImageByName' }
+  ];
+  const mathServiceMethods = [
+    { value: 'getFibonacci', label: 'getFibonacci' },
+    { value: 'multiplyMatrices', label: 'multiplyMatrices' }
+  ];
+
+  function updateMethodSelect() {
+    methodSelect.innerHTML = '';
+    let methods = [];
+    if (apiSelect.value === 'mathService') methods = mathServiceMethods;
+    if (apiSelect.value === 'imageService') methods = imageServiceMethods;
+    methods.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.value;
+      opt.textContent = m.label;
+      methodSelect.appendChild(opt);
+    });
+    if (methods.length) methodBar.classList.remove('d-none');
+    else methodBar.classList.add('d-none');
+  }
+
+  apiSelect.addEventListener('change', () => {
+    updateMethodSelect();
+    updateJsonInput();
+  });
+
   methodSelect && methodSelect.addEventListener('change', updateJsonInput);
 
   function updateJsonInput() {
@@ -41,6 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (methodSelect.value === 'multiplyMatrices') {
         jsonInput.value = '{\n  "calls": [{\n    "service": "mathService",\n    "method": "multiplyMatrices",\n    "params": { "a": [[1,2],[3,4]], "b": [[5,6],[7,8]] }\n  }]\n}';
       }
+    } else if (apiSelect.value === 'imageService') {
+      jsonInput.value = '{\n  "calls": [{\n    "service": "imageService",\n    "method": "getImageByName",\n    "params": { "name": "cat" }\n  }]\n}';
     }
   }
 
@@ -63,7 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(json)
       });
       const data = await res.json();
-      resultBlock.textContent = JSON.stringify(data, null, 2);
+      if (
+        apiSelect.value === 'imageService' &&
+        methodSelect.value === 'getImageByName' &&
+        data[0] && data[0].result && typeof data[0].result === 'string'
+      ) {
+        const imgUrl = data[0].result;
+        const win = window.open('', '_blank', 'width=600,height=600');
+        win.document.write(`<img src='${imgUrl}' alt='Image result' style='max-width:100%;max-height:100%;display:block;margin:auto;'>`);
+        resultBlock.textContent = imgUrl;
+      } else {
+        resultBlock.textContent = JSON.stringify(data, null, 2);
+      }
       resultBlock.style.color = '';
     } catch (e) {
       resultBlock.textContent = 'Request failed: ' + e.message;
@@ -72,8 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Init
-  if (apiSelect.value === 'mathService') {
-    methodBar.classList.remove('d-none');
-    updateJsonInput();
-  }
+  updateMethodSelect();
+  updateJsonInput();
 });
